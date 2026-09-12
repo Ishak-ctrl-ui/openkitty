@@ -40,7 +40,7 @@ A sleek, premium, high-performance alternative to AppKittie, Sensor Tower, and D
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/openkitty.git
+git clone https://github.com/Ishak-ctrl-ui/openkitty.git
 cd openkitty
 
 # Install dependencies with pnpm
