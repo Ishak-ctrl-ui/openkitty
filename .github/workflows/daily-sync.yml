@@ -1,0 +1,30 @@
+name: Daily App Store Ingestion ($0 Cron)
+
+on:
+  schedule:
+    # Runs twice a day at 04:00 UTC and 16:00 UTC
+    - cron: '0 4,16 * * *'
+  workflow_dispatch: # Allows manual trigger anytime from GitHub UI
+
+jobs:
+  sync-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run Free Store Ingestion Pipeline
+        run: |
+          python scripts/ingest.py
+
+      - name: Commit & Push Updated Store Data
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/data/apps.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(data): auto-sync daily app store rankings and metrics [skip ci]" && git push)
